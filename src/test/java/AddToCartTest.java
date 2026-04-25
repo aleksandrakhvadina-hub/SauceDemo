@@ -4,6 +4,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -41,10 +42,11 @@ public class AddToCartTest {
         String actualName = driver.findElement(By.className("inventory_item_name")).getText();
         String actualPrice = driver.findElement(By.className("inventory_item_price")).getText();
 
-        // 5. проверить совпадение (assertEquals)
-        Assert.assertEquals(actualName, "Sauce Labs Backpack");
-        Assert.assertEquals(actualPrice, "$29.99");
-
+        // 5. проверить совпадение (soft assert)
+SoftAssert softAssert = new SoftAssert();
+softAssert.assertEquals(actualName, "Sauce Labs Backpack");
+softAssert.assertEquals(actualPrice, "$29.99");
+softAssert.assertAll(); 
 
         driver.quit();
     }
