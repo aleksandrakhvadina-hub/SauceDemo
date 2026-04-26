@@ -12,7 +12,6 @@ public class LoginTest extends BaseTest{
         loginPage.login("standard_user", "secret_sauce");
         Assert.assertEquals(productsPage.getTitle(), "Products");
     }
-
     @Test
     public void checkLoginWithEmptyPassword() {
         loginPage.open();
