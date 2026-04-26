@@ -3,26 +3,19 @@ package tests;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.CartPage;
-import pages.LoginPage;
 
 public class AddToCartTest extends BaseTest {
 
     @Test
     public void testCartFlow() {
-        // 1. открыть страницу и залогиниться
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        // 2. добавить товар в корзину (первый рюкзак)
+        // 1. добавить товар в корзину (первый рюкзак)
         driver.findElement(By.cssSelector("[data-test='add-to-cart-sauce-labs-backpack']")).click();
-        // 3. перейти в корзину
+        // 2. перейти в корзину
         driver.findElement(By.className("shopping_cart_link")).click();
-        // 4. взять имя и цену товара из корзины
-        CartPage cartPage = new CartPage(driver);
+        // 3. взять имя и цену товара из корзины
         String actualName = cartPage.getItemName();
         String actualPrice = cartPage.getItemPrice();
-        // 5. проверить совпадение (soft assert)
+        // 4. проверить совпадение (soft assert)
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(actualName, "Sauce Labs Backpack");
         softAssert.assertEquals(actualPrice, "$29.99");
