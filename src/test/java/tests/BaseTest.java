@@ -10,12 +10,14 @@ import pages.ProductsPage;
 
 import java.time.Duration;
 import java.util.HashMap;
+import pages.CartPage;
 
 public class BaseTest {
 
     WebDriver driver;
     LoginPage loginPage;
     ProductsPage productsPage;
+    CartPage cartPage;
 
     @BeforeMethod
     public void setUp() {
@@ -29,6 +31,7 @@ public class BaseTest {
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-infobars");
         driver = new ChromeDriver(options);
+        cartPage = new CartPage(driver);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         loginPage = new LoginPage(driver);
