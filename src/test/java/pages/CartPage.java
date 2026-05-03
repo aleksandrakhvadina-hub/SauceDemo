@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import tests.DriverManager;
 
 public class CartPage extends BasePage {
 
@@ -11,26 +12,21 @@ public class CartPage extends BasePage {
     private final By REMOVE_BUTTON = By.className("btn_action");
     private final By CHECKOUT_BUTTON = By.id("checkout");
 
-    // конструктор
-    public CartPage(WebDriver driver) {
-        super(driver);
-    }
-
     // методы взаимодействия с элементами
     // получение названия товара
     public String getItemName() {
-        return driver.findElement(ITEM_NAME).getText();
+        return DriverManager.getDriver().findElement(ITEM_NAME).getText();
     }
     // получение цены товара
     public String getItemPrice() {
-        return driver.findElement(ITEM_PRICE).getText();
+        return DriverManager.getDriver().findElement(ITEM_PRICE).getText();
     }
     // удаление товара из корзины
     public void removeItem() {
-        driver.findElement(REMOVE_BUTTON).click();
+        DriverManager.getDriver().findElement(REMOVE_BUTTON).click();
     }
     // переход на страницу оформления заказа
     public void goToCheckout() {
-        driver.findElement(CHECKOUT_BUTTON).click();
+        DriverManager.getDriver().findElement(CHECKOUT_BUTTON).click();
     }
 }

@@ -3,23 +3,21 @@ package tests;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.CartPage;
-import pages.LoginPage;
+import tests.DriverManager;
 
 public class GoToEmptyCart extends BaseTest {
 
-    @Test
+    @Test(
+            description = "Проверка отображения пустой корзины",
+            testName = "Проверка отображения пустой корзины",
+            groups = {"smoke"}
+    )
     public void checkEmptyCart() {
-        // 1. открыть страницу и залогиниться
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
-        // 2. перейти в корзину (ничего не добавляя)
-        driver.findElement(By.className("shopping_cart_link")).click();
-        // 3. проверить что корзина пуста
-        CartPage cartPage = new CartPage(driver);
+        // 1. перейти в корзину (ничего не добавляя)
+        DriverManager.getDriver().findElement(By.className("shopping_cart_link")).click();
+        // 2. проверить что корзина пуста
         SoftAssert softAssert = new SoftAssert();
-        int itemsCount = driver.findElements(By.className("cart_item")).size();
+        int itemsCount = DriverManager.getDriver().findElements(By.className("cart_item")).size();
         softAssert.assertEquals(itemsCount, 0);
 
         softAssert.assertAll();
