@@ -3,7 +3,8 @@ package tests;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import tests.DriverManager;
+import tests.base.BaseTest;
+import utils.DriverManager;
 
 public class GoToEmptyCart extends BaseTest {
 

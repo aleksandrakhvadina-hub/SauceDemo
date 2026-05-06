@@ -1,7 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
-import tests.DriverManager;
+import utils.DriverManager;
 
 public class LoginPage extends BasePage {
     /*

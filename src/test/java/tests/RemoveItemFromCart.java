@@ -3,8 +3,8 @@ package tests;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.CartPage;
-import pages.LoginPage;
+import tests.base.BaseTest;
+import utils.DriverManager;
 
 public class RemoveItemFromCart extends BaseTest {
 

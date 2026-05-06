@@ -1,8 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import tests.DriverManager;
+import utils.DriverManager;
 
 public class CartPage extends BasePage {
 

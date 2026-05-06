@@ -3,6 +3,8 @@ package tests;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.openqa.selenium.WebElement;
+import tests.base.BaseTest;
+import utils.DriverManager;
 
 public class LocatorTest extends BaseTest {
 

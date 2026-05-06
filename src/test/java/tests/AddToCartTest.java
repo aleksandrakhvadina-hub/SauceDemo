@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import org.testng.annotations.DataProvider;
+import tests.base.BaseTest;
+import utils.DriverManager;
 
 public class AddToCartTest extends BaseTest {
 
