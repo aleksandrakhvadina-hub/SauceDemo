@@ -4,6 +4,7 @@
 
     <listeners>
         <listener class-name="utils.RetryListener"/>
+        <listener class-name="utils.TestListener"/>
     </listeners>
 
     <test name="Chrome Tests">
@@ -27,5 +28,4 @@
             <class name="tests.RemoveItemFromCart"/>
         </classes>
     </test>
-
 </suite>

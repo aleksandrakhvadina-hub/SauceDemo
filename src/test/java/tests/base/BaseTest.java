@@ -1,13 +1,17 @@
 package tests.base;
 
+import io.qameta.allure.Description;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Listeners;
+import utils.AllureUtils;
 import utils.DriverManager;
 import pages.LoginPage;
 import pages.ProductsPage;
@@ -16,6 +20,7 @@ import pages.CartPage;
 import java.time.Duration;
 import java.util.HashMap;
 
+@Listeners(utils.TestListener.class)
 public class BaseTest {
 
     protected LoginPage loginPage;
@@ -23,7 +28,8 @@ public class BaseTest {
     protected CartPage cartPage;
 
     @Parameters({"browser"})
-    @BeforeMethod(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true, description = "Настройка браузера")
+    @Description("Настройка браузера")
     public void setUp(@Optional("chrome") String browser) {
         WebDriver driver;
 
@@ -49,16 +55,20 @@ public class BaseTest {
 
         DriverManager.setDriver(driver);
 
-        loginPage = new LoginPage();
-        productsPage = new ProductsPage();
-        cartPage = new CartPage();
+        loginPage = new LoginPage(DriverManager.getDriver());
+        productsPage = new ProductsPage(DriverManager.getDriver());
+        cartPage = new CartPage(DriverManager.getDriver());
 
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
     }
-
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() {
+    @AfterMethod(alwaysRun = true, description = "Закрытие браузера")
+    @Description("Закрытие браузера")
+    public void tearDown(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            AllureUtils.takeScreenshot(DriverManager.getDriver());
+        }
         DriverManager.quitDriver();
+        System.out.println("🔚 Browser closed");
     }
 }

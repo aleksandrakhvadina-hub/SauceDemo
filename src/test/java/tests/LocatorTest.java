@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.*;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,14 @@ public class LocatorTest extends BaseTest {
             testName = "Проверка локаторов Selenium",
             groups = {"regression"}
     )
+    @Description("Проверка локаторов Selenium")
+    @Epic("Technical")
+    @Feature("Локаторы и элементы")
+    @Story("Проверка локаторов Selenium")
+    @Severity(SeverityLevel.NORMAL)
+    @TmsLink("ID-7")
+    @Issue("ID-8")
+    @Owner("Khvadina Aleksandra")
     public void checkLocator() {
         // открыть страницу
         DriverManager.getDriver().get("https://www.saucedemo.com/");
