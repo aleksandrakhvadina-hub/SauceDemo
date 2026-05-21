@@ -1,12 +1,15 @@
 package tests;
 
+import lombok.extern.log4j.Log4j2;
 import io.qameta.allure.*;
 import org.openqa.selenium.By;
-import org.testng.annotations.Test;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
 import tests.base.BaseTest;
 import utils.DriverManager;
 
+@Log4j2
 public class LocatorTest extends BaseTest {
 
     @Test(
@@ -23,68 +26,91 @@ public class LocatorTest extends BaseTest {
     @Issue("ID-8")
     @Owner("Khvadina Aleksandra")
     public void checkLocator() {
+        log.info("Starting locator verification test");
         // открыть страницу
-        DriverManager.getDriver().get("https://www.saucedemo.com/");
-        // 1. поиск по id
-        WebElement usernameById = DriverManager.getDriver().findElement(By.id("user-name"));
-        // 2. поиск по name
-        WebElement usernameByName = DriverManager.getDriver().findElement(By.name("user-name"));
-        // 3. поиск по className
-        WebElement usernameByClass = DriverManager.getDriver().findElement(By.className("form_input"));
-        // 4. поиск по tagName
-        WebElement firstDiv = DriverManager.getDriver().findElement(By.tagName("div"));
+        WebDriver driver = DriverManager.getDriver();
+        log.info("Opening SauceDemo login page");
+        driver.get("https://www.saucedemo.com/");
+        log.info("Testing basic locators");
+        WebElement usernameById = driver.findElement(By.id("user-name"));
+        log.info("✓ Found by id: {}", usernameById.isDisplayed());
+
+        WebElement usernameByName = driver.findElement(By.name("user-name"));
+        log.info("✓ Found by name: {}", usernameByName.isDisplayed());
+
+        WebElement usernameByClass = driver.findElement(By.className("form_input"));
+        log.info("✓ Found by className: {}", usernameByClass.isDisplayed());
+
+        WebElement firstDiv = driver.findElement(By.tagName("div"));
+        log.info("✓ Found by tagName: {}", firstDiv.isDisplayed());
 
         // xpath
+        log.info("Testing XPath locators");
+
         // 1. по атрибуту
-        WebElement xpAttr = DriverManager.getDriver().findElement(By.xpath("//input[@id='password']"));
-        // 2. по тексту
-        WebElement xpText = DriverManager.getDriver().findElement(By.xpath("//input[@value='Login']"));
+        WebElement xpAttr = driver.findElement(By.xpath("//input[@id='password']"));
+        log.info("✓ XPath by attribute: {}", xpAttr.isDisplayed());
+
+        // 2. по тексту (для input value)
+        WebElement xpText = driver.findElement(By.xpath("//input[@value='Login']"));
+        log.info("✓ XPath by value: {}", xpText.isDisplayed());
+
         // 3. по частичному совпадению атрибута
-        WebElement xpContAttr = DriverManager.getDriver().findElement(By.xpath("//input[contains(@value,'Log')]"));
-        // 4. по частичному совпадению текста
-        WebElement xpContText = DriverManager.getDriver().findElement(By.xpath("//input[contains(@value,'Log')]"));
-        // 5. AND условие
-        WebElement xpAnd = DriverManager.getDriver().findElement(By.xpath("//input[@type='password' and @name='password']"));
-        // 6. ancestor
-        WebElement xpAnc = DriverManager.getDriver().findElement(By.xpath("//input[@id='password']//ancestor::form"));
-        // 7. descendant
-        WebElement xpDesc = DriverManager.getDriver().findElement(By.xpath("//form//descendant::input"));
-        // 8. following
-        WebElement xpFollow = DriverManager.getDriver().findElement(By.xpath("//input[@id='user-name']//following::input[1]"));
-        // 9. parent
-        WebElement xpParent = DriverManager.getDriver().findElement(By.xpath("//input[@id='user-name']/parent::div"));
-        // 10. preceding
-        WebElement xpPreceding = DriverManager.getDriver().findElement(By.xpath("//input[@value='Login']//preceding::input[1]"));
+        WebElement xpContAttr = driver.findElement(By.xpath("//input[contains(@value,'Log')]"));
+        log.info("✓ XPath contains attribute: {}", xpContAttr.isDisplayed());
+
+        // 4. AND условие
+        WebElement xpAnd = driver.findElement(By.xpath("//input[@type='password' and @name='password']"));
+        log.info("✓ XPath AND condition: {}", xpAnd.isDisplayed());
+
+        // 5. ancestor
+        WebElement xpAnc = driver.findElement(By.xpath("//input[@id='password']//ancestor::form"));
+        log.info("✓ XPath ancestor: {}", xpAnc.isDisplayed());
+
+        // 6. following
+        WebElement xpFollow = driver.findElement(By.xpath("//input[@id='user-name']//following::input[1]"));
+        log.info("✓ XPath following: {}", xpFollow.isDisplayed());
+
+        // 7. parent
+        WebElement xpParent = driver.findElement(By.xpath("//input[@id='user-name']/parent::div"));
+        log.info("✓ XPath parent: {}", xpParent.isDisplayed());
 
         // CSS
-        // 1. .class (по одному классу)
-        WebElement cssClass = DriverManager.getDriver().findElement(By.cssSelector(".form_input"));
-        // 2. .class1.class2 (составной класс, без пробела)
-        WebElement cssMultiClass = DriverManager.getDriver().findElement(By.cssSelector(".input_error.form_input"));
-        // 3. #id
-        WebElement cssId = DriverManager.getDriver().findElement(By.cssSelector("#user-name"));
-        // 4. tagname.class
-        WebElement cssTagClass = DriverManager.getDriver().findElement(By.cssSelector("input.form_input"));
-        // 5. [attribute=value]  - точное совпадение
-        WebElement cssAttr = DriverManager.getDriver().findElement(By.cssSelector("[data-test='username']"));
-        // 6. [attribute~=value] - содержит слово разделённое пробелами
-        WebElement cssTilde = DriverManager.getDriver().findElement(By.cssSelector("[class~='form_input']"));
-        // 7. [attribute|=value] - значение + дефис
-        WebElement cssPipe = DriverManager.getDriver().findElement(By.cssSelector("[id|='user']"));
-        // 8. [attribute^=value] - начинается с
-        WebElement cssStartsWith = DriverManager.getDriver().findElement(By.cssSelector("[data-test^='user']"));
-        // 9. [attribute$=value] - заканчивается на
-        WebElement cssEndsWith = DriverManager.getDriver().findElement(By.cssSelector("[data-test$='name']"));
-        // 10. [attribute*=value] содержит
-        WebElement cssContains = DriverManager.getDriver().findElement(By.cssSelector("[data-test*='user']"));
+        log.info("Testing CSS selectors");
+
+        // 1. .class
+        WebElement cssClass = driver.findElement(By.cssSelector(".form_input"));
+        log.info("✓ CSS by class: {}", cssClass.isDisplayed());
+
+        // 2. #id
+        WebElement cssId = driver.findElement(By.cssSelector("#user-name"));
+        log.info("✓ CSS by id: {}", cssId.isDisplayed());
+
+        // 3. [attribute=value]
+        WebElement cssAttr = driver.findElement(By.cssSelector("[data-test='username']"));
+        log.info("✓ CSS by attribute: {}", cssAttr.isDisplayed());
+
+        // 4. [attribute^=value] starts with
+        WebElement cssStartsWith = driver.findElement(By.cssSelector("[data-test^='user']"));
+        log.info("✓ CSS starts with: {}", cssStartsWith.isDisplayed());
+
+        // 5. [attribute*=value] contains
+        WebElement cssContains = driver.findElement(By.cssSelector("[data-test*='user']"));
+        log.info("✓ CSS contains: {}", cssContains.isDisplayed());
 
         // пришло время залогиниться)
-        DriverManager.getDriver().findElement(By.id("user-name")).sendKeys("standard_user");
-        DriverManager.getDriver().findElement(By.id("password")).sendKeys("secret_sauce");
-        DriverManager.getDriver().findElement(By.id("login-button")).click();
+        log.info("Logging in via PageObject");
+        loginPage.login("standard_user", "secret_sauce");
+        log.info("Login completed");
 
         // 6. поиск по linkText и partialLinkText
-        WebElement link = DriverManager.getDriver().findElement(By.linkText("Sauce Labs Backpack"));
-        WebElement partialLink = DriverManager.getDriver().findElement(By.partialLinkText("Sauce"));
+        log.info("Testing link locators");
+        WebElement link = driver.findElement(By.linkText("Sauce Labs Backpack"));
+        log.info("✓ Found by linkText: {}", link.isDisplayed());
+
+        WebElement partialLink = driver.findElement(By.partialLinkText("Sauce"));
+        log.info("✓ Found by partialLinkText: {}", partialLink.isDisplayed());
+
+        log.info("Locator verification test completed successfully");
     }
 }

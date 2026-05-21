@@ -1,13 +1,13 @@
 package tests;
 
+import lombok.extern.log4j.Log4j2;
 import io.qameta.allure.*;
-import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.CartPage;
 import tests.base.BaseTest;
-import utils.DriverManager;
 
+@Log4j2
 public class RemoveItemFromCart extends BaseTest {
 
     @Test(
@@ -24,6 +24,9 @@ public class RemoveItemFromCart extends BaseTest {
     @Issue("ID-10")
     @Owner("Khvadina Aleksandra")
     public void removeItemFromCart() {
+        log.info("Starting remove item from cart test");
+
+        // ↓↓↓ Используем PageObject-цепочку (читается как сценарий)
         CartPage cartPage = loginPage
                 .open()
                 .isPageOpened()
@@ -31,12 +34,25 @@ public class RemoveItemFromCart extends BaseTest {
                 .isPageOpened()
                 .goToCart();
 
-        cartPage.removeItem();
-        SoftAssert softAssert = new SoftAssert();
-        // найти все товары в корзине - если список пустой, то size = 0
-        int itemsCount = DriverManager.getDriver().findElements(By.className("cart_item")).size();
+        log.info("Navigated to Cart page");
 
-        softAssert.assertEquals(itemsCount, 0); // ← проверяем, что корзина пуста
+        log.info("Removing item from cart");
+        cartPage.removeItem();
+
+        SoftAssert softAssert = new SoftAssert();
+
+        int itemsCount = cartPage.getItemsCount();  // ← метод в CartPage (см. ниже)
+
+        log.info("Cart items count after removal: {}", itemsCount);
+        softAssert.assertEquals(itemsCount, 0, "Expected empty cart, but found " + itemsCount + " items");
+
+        if (itemsCount == 0) {
+            log.info("✓ Cart is empty after removal");
+        } else {
+            log.error("✗ Cart still contains {} items", itemsCount);
+        }
+
         softAssert.assertAll();
+        log.info("Remove item from cart test completed");
     }
 }

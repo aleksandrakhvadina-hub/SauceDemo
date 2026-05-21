@@ -1,5 +1,6 @@
 package tests.base;
 
+import lombok.extern.log4j.Log4j2;
 import io.qameta.allure.Description;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,18 +20,23 @@ import pages.CartPage;
 
 import java.time.Duration;
 import java.util.HashMap;
+import steps.LoginStep;
 
+@Log4j2
 @Listeners(utils.TestListener.class)
 public class BaseTest {
 
     protected LoginPage loginPage;
     protected ProductsPage productsPage;
     protected CartPage cartPage;
+    protected LoginStep loginStep;
 
     @Parameters({"browser"})
     @BeforeMethod(alwaysRun = true, description = "Настройка браузера")
     @Description("Настройка браузера")
     public void setUp(@Optional("chrome") String browser) {
+        log.info("Setting up browser: '{}'", browser);
+
         WebDriver driver;
 
         if (browser.equalsIgnoreCase("chrome")) {
@@ -54,21 +60,30 @@ public class BaseTest {
         }
 
         DriverManager.setDriver(driver);
+        loginStep = new LoginStep(driver);
 
         loginPage = new LoginPage(DriverManager.getDriver());
         productsPage = new ProductsPage(DriverManager.getDriver());
         cartPage = new CartPage(DriverManager.getDriver());
 
+        log.info("LoginPage initialized");
+        log.info("ProductsPage initialized");
+        log.info("CartPage initialized");
+
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
+
+        log.info("Browser setup completed");
     }
     @AfterMethod(alwaysRun = true, description = "Закрытие браузера")
     @Description("Закрытие браузера")
     public void tearDown(ITestResult result) {
+        log.info("Tearing down browser");
+
         if (result.getStatus() == ITestResult.FAILURE) {
             AllureUtils.takeScreenshot(DriverManager.getDriver());
         }
         DriverManager.quitDriver();
-        System.out.println("🔚 Browser closed");
+        log.info("Browser closed");
     }
 }

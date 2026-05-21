@@ -1,12 +1,13 @@
 package tests;
 
+import lombok.extern.log4j.Log4j2;
 import io.qameta.allure.*;
-import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import tests.base.BaseTest;
-import utils.DriverManager;
+import pages.CartPage;
 
+@Log4j2
 public class GoToEmptyCart extends BaseTest {
 
     @Test(
@@ -23,13 +24,25 @@ public class GoToEmptyCart extends BaseTest {
     @Issue("ID-6")
     @Owner("Khvadina Aleksandra")
     public void checkEmptyCart() {
+        log.info("Starting empty cart verification test");
         // 1. перейти в корзину (ничего не добавляя)
-        DriverManager.getDriver().findElement(By.className("shopping_cart_link")).click();
+        CartPage cartPage = productsPage.goToCart();
+        log.info("Navigated to Cart page");
         // 2. проверить что корзина пуста
         SoftAssert softAssert = new SoftAssert();
-        int itemsCount = DriverManager.getDriver().findElements(By.className("cart_item")).size();
-        softAssert.assertEquals(itemsCount, 0);
+
+        log.info("Checking cart items count");
+        int itemsCount = cartPage.getItemsCount(); // ← вынесли логику в страницу
+
+        softAssert.assertEquals(itemsCount, 0, "Expected empty cart, but found " + itemsCount + " items");
+
+        if (itemsCount == 0) {
+            log.info("✓ Cart is empty as expected");
+        } else {
+            log.error("✗ Cart contains {} items, expected 0", itemsCount);
+        }
 
         softAssert.assertAll();
+        log.info("Empty cart verification test completed");
     }
 }

@@ -1,17 +1,14 @@
 package tests;
 
+import lombok.extern.log4j.Log4j2;
 import io.qameta.allure.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import org.testng.annotations.DataProvider;
 import pages.CartPage;
 import tests.base.BaseTest;
-import utils.DriverManager;
 
+@Log4j2
 public class AddToCartTest extends BaseTest {
 
     @DataProvider(name = "products")
@@ -37,20 +34,31 @@ public class AddToCartTest extends BaseTest {
     @Issue("ID-4")
     @Owner("Khvadina Aleksandra")
     public void testCartFlow(String expectedName, String addToCartSelector, String expectedPrice) {
-        CartPage cartPage = loginPage
-                .open()
-                .isPageOpened()
-                .login("standard_user", "secret_sauce")
+        log.info("Starting cart flow test for item: '{}'", expectedName);
+
+        CartPage cartPage = loginStep
+                .login("standard_user", "secret_sauce")  // ← один шаг вместо цепочки
                 .isPageOpened()
                 .addToCart(expectedName)
                 .goToCart();
 
         SoftAssert softAssert = new SoftAssert();
+        log.info("Verifying item '{}' with price '{}' in cart", expectedName, expectedPrice);
+        boolean isInCart = cartPage.isItemInCart(expectedName, expectedPrice);
+
         softAssert.assertTrue(
-                cartPage.isItemInCart(expectedName, expectedPrice),
+                isInCart,
                 "Товар '" + expectedName + "' с ценой " + expectedPrice + " не найден в корзине"
         );
+
+        if (isInCart) {
+            log.info("✓ Item '{}' verified in cart", expectedName);
+        } else {
+            log.error("✗ Item '{}' NOT found in cart", expectedName);
+        }
+
         softAssert.assertAll();
+        log.info("Cart flow test completed for item: '{}'", expectedName);
     }
 }
 
