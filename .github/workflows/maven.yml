@@ -27,6 +27,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Install Edge
+      uses: abhi1693/setup-browser@v0.3.4
+      with:
+        browser: edge
+        version: latest
     - name: Tests Run
       run: mvn clean test
 
