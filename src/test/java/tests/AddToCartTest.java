@@ -37,7 +37,7 @@ public class AddToCartTest extends BaseTest {
         log.info("Starting cart flow test for item: '{}'", expectedName);
 
         CartPage cartPage = loginStep
-                .login("standard_user", "secret_sauce")  // ← один шаг вместо цепочки
+                .login(user, password)
                 .isPageOpened()
                 .addToCart(expectedName)
                 .goToCart();
