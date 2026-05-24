@@ -30,7 +30,7 @@ public class LoginTest extends BaseTest {
         ProductsPage productsPage = loginPage
                 .open()
                 .isPageOpened()
-                .login("standard_user", "secret_sauce");
+                .login(user, password);
 
         productsPage.isPageOpened();
         softAssert.assertAll();
@@ -42,8 +42,8 @@ public class LoginTest extends BaseTest {
     public Object[][] loginData() {
         log.info("Loading invalid login test data");
         return new Object[][] {
-                {"", "secret_sauce", "Epic sadface: Username is required"},
-                {"standard_user", "", "Epic sadface: Password is required"},
+                {"", password, "Epic sadface: Username is required"},
+                {user, "", "Epic sadface: Password is required"},
                 {"test", "test", "Epic sadface: Username and password do not match any user in this service"}
         };
     }
